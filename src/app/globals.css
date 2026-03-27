@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+/* Design tokens — single accent (indigo), zinc neutrals */
+@theme {
+  --color-background: #fafafa;
+  --color-foreground: #18181b;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  .dark {
+    --color-background: #09090b;
+    --color-foreground: #fafafa;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+@layer components {
+  /* 8px rhythm: p-5=20px, p-6=24px, gap-6/gap-8 */
+  .surface-panel {
+    @apply rounded-2xl border border-zinc-200/90 bg-white shadow-[0_1px_2px_0_rgb(0_0_0/0.04)] dark:border-zinc-800/90 dark:bg-zinc-900 dark:shadow-none;
+  }
+
+  .surface-panel-hover {
+    @apply rounded-2xl border border-zinc-200/90 bg-white shadow-[0_1px_2px_0_rgb(0_0_0/0.04)] transition-shadow duration-200 ease-out dark:border-zinc-800/90 dark:bg-zinc-900 dark:shadow-none;
+  }
+
+  .surface-panel-hover:hover {
+    @apply shadow-[0_8px_24px_-4px_rgb(0_0_0/0.08)] dark:shadow-[0_8px_24px_-4px_rgb(0_0_0/0.35)];
+  }
+
+  .surface-inset {
+    @apply rounded-xl border border-zinc-100 bg-zinc-50/80 dark:border-zinc-800/80 dark:bg-zinc-950/50;
+  }
+
+  .text-label {
+    @apply text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500 dark:text-zinc-400;
+  }
+
+  .text-title {
+    @apply text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-50;
+  }
+
+  .text-body {
+    @apply text-sm leading-relaxed text-zinc-600 dark:text-zinc-400;
+  }
+
+  .text-meta {
+    @apply text-xs text-zinc-500 dark:text-zinc-500;
+  }
+
+  .link-accent {
+    @apply text-sm font-medium text-indigo-600 transition-colors hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-100;
+  }
+
+  /* Briefing focal — subtle glow, no rainbow */
+  .briefing-focal {
+    @apply relative overflow-hidden rounded-2xl border border-indigo-200/60 bg-gradient-to-b from-indigo-50/90 to-white shadow-[0_12px_40px_-16px_rgb(79_70_229/0.28)] dark:border-indigo-500/20 dark:from-zinc-900 dark:to-zinc-950 dark:shadow-[0_20px_50px_-20px_rgb(79_70_229/0.35)];
+  }
+
+  .briefing-focal::before {
+    content: "";
+    @apply pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgb(99_102_241/0.18),transparent)] dark:bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgb(99_102_241/0.12),transparent)];
+  }
+
+  .input-field {
+    @apply w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-900 shadow-sm placeholder:text-zinc-400 transition-colors focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500;
+  }
+}

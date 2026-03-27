@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tasks      Task[]
+  goals      Goal[]
+  briefings  Briefing[]
+  events     CalendarEvent[]
+}
+
+model Task {
+  id           String    @id @default(cuid())
+  title        String
+  description  String?
+  priority     String    @default("medium") // low, medium, high, urgent
+  status       String    @default("pending") // pending, in_progress, completed, missed
+  estimatedMin Int       @default(30)
+  dueDate      DateTime?
+  completedAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  userId      String
+  user        User       @relation(fields: [userId], references: [id])
+  goalId      String?
+  goal        Goal?      @relation(fields: [goalId], references: [id])
+  milestoneId String?
+  milestone   Milestone? @relation(fields: [milestoneId], references: [id])
+}
+
+model Goal {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  category    String   @default("personal") // personal, health, career, education, finance
+  status      String   @default("active")   // active, completed, paused, abandoned
+  targetDate  DateTime
+  progress    Float    @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId     String
+  user       User        @relation(fields: [userId], references: [id])
+  milestones Milestone[]
+  tasks      Task[]
+}
+
+model Milestone {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  weekNumber  Int
+  status      String    @default("pending") // pending, in_progress, completed, missed
+  targetDate  DateTime
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  goalId String
+  goal   Goal   @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  tasks  Task[]
+}
+
+model Briefing {
+  id        String   @id @default(cuid())
+  date      DateTime
+  content   String   // JSON string of structured briefing
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model CalendarEvent {
+  id        String   @id @default(cuid())
+  title     String
+  startTime DateTime
+  endTime   DateTime
+  location  String?
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
